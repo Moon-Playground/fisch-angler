@@ -3,6 +3,29 @@ import sys
 
 
 class UIHelpers:
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller/Nuitka """
+        if getattr(sys, 'frozen', False):
+            # If frozen (PyInstaller, Nuitka, cx_Freeze)
+            if hasattr(sys, '_MEIPASS'):
+                # PyInstaller
+                base_path = sys._MEIPASS
+            else:
+                # Nuitka, cx_Freeze
+                base_path = os.path.dirname(sys.executable)
+        else:
+            # Development: use the directory of the package
+            # This file is in autoclicker/utils, so the package root is one level up
+            base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        full_path = os.path.join(base_path, relative_path)
+
+        # Fallback to CWD if not found, for backward compatibility
+        if not os.path.exists(full_path):
+            cwd_path = os.path.join(os.path.abspath("."), relative_path)
+            if os.path.exists(cwd_path):
+                return cwd_path
+        return full_path
+
     def find_and_set_icon(self):
         """
         Find and set the application icon from various candidate paths.
@@ -10,23 +33,9 @@ class UIHelpers:
         Returns:
             bool: True if icon was successfully set, False otherwise
         """
-        icon_candidates = []
-        
-        # 1. PyInstaller Temp Path
-        if hasattr(sys, '_MEIPASS'):
-            icon_candidates.append(os.path.join(sys._MEIPASS, "res", "icon.ico"))
-            icon_candidates.append(os.path.join(sys._MEIPASS, "icon.ico"))
-        
-        # 2. Local Paths
-        icon_candidates.append(os.path.abspath("res/icon.ico"))
-        icon_candidates.append(os.path.abspath("icon.ico"))
-
-        for icon_path in icon_candidates:
-            if os.path.exists(icon_path):
-                try:
-                    self.iconbitmap(icon_path)
-                    return True
-                except Exception:
-                    continue
-        
-        return False
+        icon_path = self.resource_path("res/icon.ico")
+        try:
+            self.iconbitmap(icon_path)
+            return True
+        except Exception:
+            return False
