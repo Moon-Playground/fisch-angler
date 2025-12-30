@@ -1,0 +1,12 @@
+customtkinter
+dxcam-cpp
+keyboard
+pydirectinput
+tomlkit
+pytesseract
+rapidfuzz
+opencv-python
+winrt-Windows-Media-Ocr
+winrt-Windows-Graphics-Imaging
+winrt-Windows-Storage-Streams
+Pillow
