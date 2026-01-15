@@ -3,6 +3,7 @@ build/
 dist/
 *venv*/
 
+*.exe
 pyarmor.*
 *.pyc
 *.pyo

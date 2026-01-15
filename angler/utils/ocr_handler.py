@@ -1,6 +1,7 @@
 import asyncio
 
 import winrt.windows.media.ocr as ocr
+import winrt.windows.foundation
 import winrt.windows.graphics.imaging as imaging
 import winrt.windows.storage.streams as streams
 import cv2

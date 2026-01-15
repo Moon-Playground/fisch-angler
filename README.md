@@ -58,10 +58,7 @@ Macro for automating angler quest in Roblox fisch.
 
 ## 🚀 Usage
 
-Launch the application using:
-```bash
-python -m angler
-```
+WIP
 
 ### ⌨️ Default Hotkeys
 

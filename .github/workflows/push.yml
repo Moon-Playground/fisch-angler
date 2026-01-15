@@ -27,6 +27,7 @@ jobs:
           clang: 'on'
           lto: 'yes'
           enable-plugins: tk-inter
+          include-package: 'winrt'
           windows-icon-from-ico: 'angler/res/icon.ico'
           include-data-dir: 'angler/res=res'
           output-file: 'angler.exe'
