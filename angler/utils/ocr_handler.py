@@ -127,11 +127,27 @@ class OcrHandler:
             # dxcam returns RGB
             frame_bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         
-        # Convert to grayscale
-        gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
+        # --- Improvement for Small Text ---
         
-        # Threshold to get white text (adjust values if needed)
-        # 200-255 range is usually good for white text
-        _, thresh = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY)
+        # 1. Upscale the image - OCR engines work better with larger text
+        # Scaling by 2x or 3x is usually the sweet spot
+        scale_factor = 3
+        height, width = frame_bgr.shape[:2]
+        img = cv2.resize(frame_bgr, (width * scale_factor, height * scale_factor), interpolation=cv2.INTER_CUBIC)
+        
+        # 2. Convert to grayscale
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        
+        # 3. Sharpen the image to make edges crisper
+        sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+        gray = cv2.filter2D(gray, -1, sharpen_kernel)
+        
+        # 4. Threshold to get white text
+        # Lowered threshold slightly to 180 (from 200) to capture more variants of white/light gray
+        _, thresh = cv2.threshold(gray, 180, 255, cv2.THRESH_BINARY)
+        
+        # 5. Optional: Morphological closing to fill small gaps in characters
+        kernel = np.ones((2,2), np.uint8)
+        thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
         
         return thresh
