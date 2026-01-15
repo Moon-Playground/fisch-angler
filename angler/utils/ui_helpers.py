@@ -15,7 +15,7 @@ class UIHelpers:
                 base_path = os.path.dirname(sys.executable)
         else:
             # Development: use the directory of the package
-            # This file is in autoclicker/utils, so the package root is one level up
+            # This file is in angler/utils, so the package root is one level up
             base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         full_path = os.path.join(base_path, relative_path)
 

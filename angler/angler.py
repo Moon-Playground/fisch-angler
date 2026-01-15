@@ -252,7 +252,7 @@ Don't enable debug log if you plan to use the macro for long periods of time.
             except:
                 pass
         self.status_window = tk.Toplevel(self)
-        self.status_window.title("AutoShake Status")
+        self.status_window.title("Angler Macro Status")
         
         # Load pos from config or default
         sx = self.config_data.get('ui', {}).get('status_x', 100)
@@ -265,7 +265,7 @@ Don't enable debug log if you plan to use the macro for long periods of time.
         
         # Style
         self.status_window.configure(bg="black")
-        self.status_lbl_widget = tk.Label(self.status_window, text="AutoShake: Inactive", font=("Arial", 10, "bold"), bg="black", fg="white")
+        self.status_lbl_widget = tk.Label(self.status_window, text="Angler Macro: Inactive", font=("Arial", 10, "bold"), bg="black", fg="white")
         self.status_lbl_widget.pack(expand=True, fill="both")
         
         # Drag functionality

@@ -58,9 +58,9 @@ class Config:
         }
         default_config["fish_list"] = fish_list
 
-        if os.path.exists("auto_shake.toml"):
+        if os.path.exists("angler.toml"):
             try:
-                with open("auto_shake.toml", "rb") as f:
+                with open("angler.toml", "rb") as f:
                     config = tomllib.load(f)
                 
                 # Ensure all keys exist
@@ -124,5 +124,5 @@ class Config:
         self.apply_hotkeys()
 
     def save_config_file(self, config):
-        with open("auto_shake.toml", "w") as f:
+        with open("angler.toml", "w") as f:
             tomlkit.dump(tomlkit.parse(tomlkit.dumps(config)), f)
