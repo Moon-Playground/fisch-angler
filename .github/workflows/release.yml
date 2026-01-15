@@ -35,6 +35,8 @@ jobs:
                 nuitka-version: 'main'
                 script-name: 'angler'
                 mode: 'onefile'
+                clang: 'on'
+                lto: 'yes'
                 enable-plugins: tk-inter
                 windows-icon-from-ico: 'angler/res/icon.ico'
                 windows-console-mode: 'disable'
