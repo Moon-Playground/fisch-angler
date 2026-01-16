@@ -11,11 +11,11 @@ Macro for automating angler quest in Roblox fisch.
 ## ✨ Features
 
 - 🚀 **High-Speed Capture**: Powered by `dxcam-cpp`, achieving ultra-low latency screen region monitoring.
-- 🔍 **Dual OCR Backends**:
+- 🔍 **Dual OCR Backends**: 
   - **Tesseract OCR**: Industry-standard open-source OCR engine.
   - **Windows WinRT OCR**: Native, hardware-accelerated OCR for Windows.
 - 🎯 **Fuzzy Matching**: Intelligent text recognition that compensates for OCR inaccuracies using `rapidfuzz`.
-- 🕹️ **Customizable Hotkeys**: Take full control with user-defined hotkeys for all major actions.
+- 🕹️ **Low-Level Input**: Uses `pydirectinput-rgx` for better game compatibility.
 - 🎨 **Modern Interface**: A sleek, dark-themed dashboard built with `CustomTkinter`.
 - 🌍 **Multi-Location Support**: Built-in configurations for many in-game locations (Moosewood, Sunstone, Roslit, etc.).
 - 📊 **Real-time Debugging**: Transparent overlay and detailed log window for real-time status tracking.
@@ -34,53 +34,48 @@ Macro for automating angler quest in Roblox fisch.
 
 ## 📦 Installation
 
-### Prebuilt binaries
-1. Download the latest release from [releases](https://github.com/Moon-Playground/fisch-angler/releases).
-2. Extract the contents of the downloaded zip file.
+### Prebuilt Binaries
+1. Download the latest release from [Releases](https://github.com/Moon-Playground/fisch-angler/releases).
+2. Extract the ZIP file.
 3. Run `angler.exe`.
 
-### from source
+### From Source
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/Moon-Playground/fisch-angler.git
    cd fisch-angler
    ```
-
 2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Verify Configuration**:
-   The application will automatically generate a default `auto_shake.toml` upon the first launch.
-
 ---
 
 ## 🚀 Usage
 
-WIP
+For a detailed step-by-step setup guide with images, please refer to the **[USAGE.md](./USAGE.md)**.
+
+### Quick Start:
+1. **Set Location**: Choose your current area on the Home tab.
+2. **Configure OCR**: Press `F3` to position the capture box over the fish name.
+3. **Set Coordinates**: Use the "Coordinates" tab to pick click points (Dialogue, Search Bar, etc.).
+4. **Run**: Press `F4` to start/stop the macro.
 
 ### ⌨️ Default Hotkeys
 
 | Action | Key | Description |
 | :--- | :--- | :--- |
-| **Test Capture** | `F2` | Captures the current region and displays OCR results. |
-| **Toggle Box** | `F3` | Shows or hides the capture region selection box. |
-| **Toggle Action** | `F4` | Starts or stops the automation worker. |
+| **Test Capture** | `F2` | Runs OCR on the current region and shows result. |
+| **Toggle Box** | `F3` | Shows/Hides the capture region selection box. |
+| **Start/Stop** | `F4` | Starts or stops the automation worker. |
 | **Exit App** | `F5` | Gracefully closes the application. |
-
-### 🎯 Setting Up
-
-1. **Position the Capture Box**: Press `F3` and drag/resize the blue box over the area where fish names appear.
-2. **Set Click Points**: Use the "Set Coordinates" buttons in the UI to define where the app should click (Search Bar, Dialogue, etc.).
-3. **Select Location**: Choose your current in-game location from the dropdown to load the corresponding fish list.
-4. **Start**: Press `F4` to begin automation.
 
 ---
 
 ## ⚙️ Configuration
 
-Settings are persisted in `auto_shake.toml`. You can manually edit this file to fine-tune delays, add new fish, or change hotkeys.
+Settings are persisted in `angler.toml`. You can manually edit this file to fine-tune delays, add new fish, or change hotkeys.
 
 ```toml
 [ocr]
