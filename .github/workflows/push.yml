@@ -30,10 +30,10 @@ jobs:
           include-package: 'winrt'
           windows-icon-from-ico: 'angler/res/icon.ico'
           include-data-dir: 'angler/res=res'
-          output-file: 'angler.exe'
+          output-file: 'angler-debug.exe'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: angler
-          path: build/angler.exe
+          path: build/angler-debug.exe

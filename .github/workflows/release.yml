@@ -27,7 +27,6 @@ jobs:
               run: |
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
-                pip install pyinstaller
 
             - name: Build
               uses: nuitka/nuitka-action@main
@@ -42,14 +41,19 @@ jobs:
                 windows-icon-from-ico: 'angler/res/icon.ico'
                 windows-console-mode: 'disable'
                 include-data-dir: 'angler/res=res'
-                output-file: 'angler.exe'
+                output-file: 'angler-${{ inputs.tag_name }}.exe'
+
+            - name: Compress
+              run: |
+                cd build
+                Compress-Archive -Path angler-${{ inputs.tag_name }}.exe -DestinationPath angler-${{ inputs.tag_name }}.zip
 
             - name: Create release
               uses: softprops/action-gh-release@v2
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                files: build/angler.exe
+                files: build/angler-${{ inputs.tag_name }}.zip
                 tag_name: ${{ inputs.tag_name }}
                 name: ${{ inputs.tag_name }}
                 draft: false
