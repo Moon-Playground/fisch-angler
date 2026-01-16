@@ -1,7 +1,7 @@
 customtkinter
 dxcam-cpp
 keyboard
-pydirectinput
+pydirectinput-rgx
 tomlkit
 pytesseract
 rapidfuzz
