@@ -135,6 +135,15 @@ Don't enable debug log if you plan to use the macro for long periods of time.
         self.status_label = ctk.CTkLabel(self.home_tab, text="Status: Inactive", text_color="red", font=("Arial", 16, "bold"))
         self.status_label.pack(pady=10)
 
+        # angler location
+        self.location_frame = ctk.CTkFrame(self.home_tab, fg_color="transparent")
+        self.location_frame.pack(pady=10)
+        ctk.CTkLabel(self.location_frame, text="Angler Location:").pack(side="left", padx=5)
+        self.angler_location_var = ctk.StringVar(value=self.angler_location)
+        angler_location_list = list(self.config_data["fish_list"].keys())
+        ctk.CTkOptionMenu(self.location_frame, variable=self.angler_location_var, values=angler_location_list).pack(side="left", padx=5)
+        self.angler_location_var.trace_add("write", lambda *args: self._update_angler_location())
+
         self.info_label = ctk.CTkLabel(self.home_tab, text="Settings and Hotkeys are now in separate tabs", font=("Arial", 12))
         self.info_label.pack(pady=10)
 
@@ -164,32 +173,25 @@ Don't enable debug log if you plan to use the macro for long periods of time.
 
         ctk.CTkLabel(self.general_frame, text="General Settings", font=("Arial", 14, "bold")).grid(row=0, column=0, columnspan=2, pady=(10, 5))
 
-        # angler location
-        ctk.CTkLabel(self.general_frame, text="Angler Location").grid(row=1, column=0, padx=15, pady=15, sticky="w")
-        self.angler_location_var = ctk.StringVar(value=self.angler_location)
-        angler_location_list = list(self.config_data["fish_list"].keys())
-        ctk.CTkOptionMenu(self.general_frame, variable=self.angler_location_var, values=angler_location_list).grid(row=1, column=1, padx=10, pady=15, sticky="ew")
-        self.angler_location_var.trace_add("write", lambda *args: self._update_angler_location())
-
-        ctk.CTkLabel(self.general_frame, text="OCR Backend").grid(row=2, column=0, padx=15, pady=15, sticky="w")
+        ctk.CTkLabel(self.general_frame, text="OCR Backend").grid(row=1, column=0, padx=15, pady=15, sticky="w")
         self.backend_var = ctk.StringVar(value=self.ocr_backend)
         backend_list = ["winrt"]
         if self.test_tesseract():
             backend_list.append("tesseract")
         backend_cb = ctk.CTkOptionMenu(self.general_frame, variable=self.backend_var, values=backend_list)
-        backend_cb.grid(row=2, column=1, padx=10, pady=15, sticky="ew")
+        backend_cb.grid(row=1, column=1, padx=10, pady=15, sticky="ew")
         self.backend_var.trace_add("write", lambda *args: self._update_ocr_backend())
 
         # Overlay entries
-        ctk.CTkLabel(self.general_frame, text="Status Overlay").grid(row=3, column=0, padx=15, pady=15, sticky="w")
+        ctk.CTkLabel(self.general_frame, text="Status Overlay").grid(row=2, column=0, padx=15, pady=15, sticky="w")
         self.overlay_var = ctk.BooleanVar(value=self.enable_overlay)
         overlay_cb = ctk.CTkSwitch(self.general_frame, text="", variable=self.overlay_var, command=self._update_overlay)
-        overlay_cb.grid(row=3, column=1, padx=10, pady=15, sticky="ew")
+        overlay_cb.grid(row=2, column=1, padx=10, pady=15, sticky="ew")
 
-        ctk.CTkLabel(self.general_frame, text="Debug Log").grid(row=4, column=0, padx=15, pady=15, sticky="w")
+        ctk.CTkLabel(self.general_frame, text="Debug Log").grid(row=3, column=0, padx=15, pady=15, sticky="w")
         self.debug_var = ctk.BooleanVar(value=self.enable_debug)
         debug_cb = ctk.CTkSwitch(self.general_frame, text="", variable=self.debug_var, command=self._update_debug)
-        debug_cb.grid(row=4, column=1, padx=10, pady=15, sticky="ew")
+        debug_cb.grid(row=3, column=1, padx=10, pady=15, sticky="ew")
 
         # --- DELAYS TAB ---
         self.delay_frame = ctk.CTkFrame(self.delays_tab)
@@ -499,7 +501,7 @@ Don't enable debug log if you plan to use the macro for long periods of time.
                 pydirectinput.moveTo(int(self.fish_area_x-1), int(self.fish_area_y))
                 if not self.sleep_interruptible(self.action_delay): continue
                 pydirectinput.click()
-                
+
                 if not self.sleep_interruptible(self.action_delay): continue
                 self.log("Closing interface...")
                 pydirectinput.press('g')
