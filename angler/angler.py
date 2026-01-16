@@ -88,8 +88,8 @@ class AnglerApp(ctk.CTk, Utils):
         # Status Window (Standard TK for simpler overlay management)
         self.status_window = None
         self.create_status_window()
-        if not self.enable_overlay:
-            self.hide_status_window()
+        if self.enable_overlay:
+            self.show_status_window()
         self.after(200, lambda: self._set_icon())
 
     def _set_icon(self):
@@ -254,6 +254,7 @@ Don't enable debug log if you plan to use the macro for long periods of time.
             except:
                 pass
         self.status_window = tk.Toplevel(self)
+        self.status_window.withdraw()
         self.status_window.title("Angler Macro Status")
         
         # Load pos from config or default
@@ -267,7 +268,7 @@ Don't enable debug log if you plan to use the macro for long periods of time.
         
         # Style
         self.status_window.configure(bg="black")
-        self.status_lbl_widget = tk.Label(self.status_window, text="Angler Macro: Inactive", font=("Arial", 10, "bold"), bg="black", fg="white")
+        self.status_lbl_widget = tk.Label(self.status_window, text="Angler: Inactive", font=("Arial", 10, "bold"), bg="black", fg="white")
         self.status_lbl_widget.pack(expand=True, fill="both")
         
         # Drag functionality
@@ -321,7 +322,8 @@ Don't enable debug log if you plan to use the macro for long periods of time.
             self.active.set()
             self.status_lbl_widget.config(text="Angler: Active")
             self.status_label.configure(text="Angler: Active", text_color="green")
-            self.show_status_window()
+            if self.enable_overlay:
+                self.show_status_window()
 
     def _toggle_box(self):
         if self.capture_box.state() == "withdrawn":
