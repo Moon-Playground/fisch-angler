@@ -1,6 +1,6 @@
 import asyncio
 import dxcam_cpp as dxcam
-import keyboard as kb
+
 import tkinter as tk
 import customtkinter as ctk
 import threading

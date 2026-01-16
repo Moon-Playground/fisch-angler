@@ -1,4 +1,5 @@
 import keyboard
+import pydirectinput
 import time
 from tkinter import messagebox
 
@@ -16,7 +17,7 @@ class CoordinatesHelpers:
                 break
             time.sleep(0.01)
             
-        x, y = self.winfo_pointerxy()
+        x, y = pydirectinput.position()
         messagebox.showinfo("Success", f"{label} coordinates set: {x}, {y}")
         return x, y
 
