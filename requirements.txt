@@ -1,13 +1,9 @@
 customtkinter
-dxcam-cpp
-keyboard
-pydirectinput-rgx
 tomlkit
 pytesseract
 rapidfuzz
 opencv-python
-winrt-Windows-Media-Ocr
-winrt-Windows-Graphics-Imaging
-winrt-Windows-Storage-Streams
-winrt-Windows-Foundation
 Pillow
+keyboard
+mss
+pyautogui

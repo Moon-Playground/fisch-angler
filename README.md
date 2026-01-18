@@ -1,21 +1,20 @@
-# 🎣 Angler Quest Automation
+# 🎣 Angler Quest Automation (Linux Branch)
 
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://www.microsoft.com/windows)
+[![Platform](https://img.shields.io/badge/platform-Linux-lightgrey.svg)](https://github.com/Moon-Playground/fisch-angler)
 
-Macro for automating angler quest in Roblox fisch.
+**Note: This is the Linux-specific branch of the Angler macro.** For the Windows version, please refer to the `main` branch.
 
 ---
 
 ## ✨ Features
 
-- 🚀 **High-Speed Capture**: Powered by `dxcam-cpp`, achieving ultra-low latency screen region monitoring.
-- 🔍 **Dual OCR Backends**: 
+- 🚀 **High-Speed Capture**: Powered by `mss`, achieving low latency screen region monitoring.
+- 🔍 **OCR Engine**: 
   - **Tesseract OCR**: Industry-standard open-source OCR engine.
-  - **Windows WinRT OCR**: Native, hardware-accelerated OCR for Windows.
 - 🎯 **Fuzzy Matching**: Intelligent text recognition that compensates for OCR inaccuracies using `rapidfuzz`.
-- 🕹️ **Low-Level Input**: Uses `pydirectinput-rgx` for better game compatibility.
+- 🕹️ **Low-Level Input**: Uses `pyautogui` for game compatibility.
 - 🎨 **Modern Interface**: A sleek, dark-themed dashboard built with `CustomTkinter`.
 - 🌍 **Multi-Location Support**: Built-in configurations for many in-game locations (Moosewood, Sunstone, Roslit, etc.).
 - 📊 **Real-time Debugging**: Transparent overlay and detailed log window for real-time status tracking.
@@ -25,10 +24,8 @@ Macro for automating angler quest in Roblox fisch.
 ## 🛠️ Prerequisites
 
 - **Python 3.11 or higher**
-- **Windows 10/11** (Required for WinRT and DXCam)
-- **Tesseract OCR** (Recommended): 
-  - Install from [here](https://github.com/UB-Mannheim/tesseract/wiki).
-  - Default path: `C:\Program Files\Tesseract-OCR\tesseract.exe`
+- **Tesseract OCR**: Install via your package manager (e.g., `sudo apt install tesseract-ocr`).
+- **X11 Session (Linux)**: This macro currently **does not support Wayland**. Most Linux distributions (like Ubuntu, Fedora, Debian) default to Wayland. You must switch to an **Xorg/X11** session at the login screen for screen capture and input simulation to work.
 
 ---
 
@@ -79,7 +76,7 @@ Settings are persisted in `angler.toml`. You can manually edit this file to fine
 
 ```toml
 [ocr]
-backend = "tesseract" # or "winrt"
+backend = "tesseract"
 
 [delay]
 loop = 30.0    # Cycle delay in seconds

@@ -1,4 +1,4 @@
-name: Release
+name: Release Linux
 
 on:
     workflow_dispatch:
@@ -11,50 +11,60 @@ on:
 
 jobs:
     release:
-        permissions:
-            contents: write
-        runs-on: windows-latest
-        steps:
+      permissions:
+        contents: write
+      runs-on: ubuntu-latest
+      container:
+        image: fedora:latest
+      steps:
+        - name: Install system dependencies
+          run: |
+            dnf install -y python3.13 python3.13-devel gcc gcc-c++ tk-devel tesseract-devel python3-pip git tar gzip patchelf wget mesa-libGL libX11
 
-            - uses: actions/checkout@v4
+        - name: Checkout
+          uses: actions/checkout@v4
 
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.13'
+        - name: Install dependencies
+          run: |
+            python3.13 -m ensurepip
+            python3.13 -m pip install --upgrade pip
+            python3.13 -m pip install -r requirements.txt
 
-            - name: Install dependencies
-              run: |
-                python -m pip install --upgrade pip
-                pip install -r requirements.txt
+        - name: Setup clang
+          run: |
+            wget https://github.com/Moon-Playground/tc-build/releases/download/21.1.8-2078da43e/Mayuri-clang_21.1.8-fedora43-x86_64-2078da43e.tar.xz
+            tar -xvf Mayuri-clang_21.1.8-fedora43-x86_64-2078da43e.tar.xz -C /usr/local
 
-            - name: Build
-              uses: nuitka/nuitka-action@main
-              with:
-                nuitka-version: 'main'
-                script-name: 'angler'
-                mode: 'onefile'
-                clang: 'on'
-                lto: 'yes'
-                enable-plugins: tk-inter
-                include-package: 'winrt'
-                windows-icon-from-ico: 'angler/res/icon.ico'
-                windows-console-mode: 'disable'
-                include-data-dir: 'angler/res=res'
-                output-file: 'angler-${{ inputs.tag_name }}.exe'
+        - name: Setup Nuitka
+          run: |
+            python3.13 -m pip install -U "https://github.com/Nuitka/Nuitka/archive/main.zip"
+            python3.13 -m pip install zstandard
 
-            - name: Compress
-              run: |
-                cd build
-                Compress-Archive -Path angler-${{ inputs.tag_name }}.exe -DestinationPath angler-${{ inputs.tag_name }}.zip
+        - name: Build
+          run: |
+            mkdir -p build
+            CC=/usr/local/bin/clang CXX=/usr/local/bin/clang++ LDFLAGS="-fuse-ld=lld" \
+            python3.13 -m nuitka \
+              --onefile \
+              --lto=yes \
+              --enable-plugin=tk-inter \
+              --include-data-dir=angler/res=res \
+              --output-dir=build \
+              --output-filename=angler-${{ inputs.tag_name }} \
+              angler
 
-            - name: Create release
-              uses: softprops/action-gh-release@v2
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                files: build/angler-${{ inputs.tag_name }}.zip
-                tag_name: ${{ inputs.tag_name }}
-                name: ${{ inputs.tag_name }}
-                draft: false
-                prerelease: ${{ inputs.pre_release }}
+        - name: Compress
+          run: |
+            cd build
+            tar -czvf angler-${{ inputs.tag_name }}.tar.gz angler-${{ inputs.tag_name }}
+
+        - name: Create release
+          uses: softprops/action-gh-release@v2
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            files: build/angler-${{ inputs.tag_name }}.tar.gz
+            tag_name: ${{ inputs.tag_name }}
+            name: ${{ inputs.tag_name }}
+            draft: false
+            prerelease: ${{ inputs.pre_release }}

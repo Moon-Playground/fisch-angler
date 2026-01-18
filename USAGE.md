@@ -4,7 +4,7 @@ Follow these steps to set up and use the Angler Quest macro effectively.
 
 ## 🚀 Initial Setup
 
-1.  **Launch the Application**: Run `angler.exe` (or `python -m angler` if running from source).
+1.  **Launch the Application**: Run `python3 -m angler`.
 2.  **Select Your Location**: On the **Home** tab, use the **Angler Location** dropdown to select your current in-game area (e.g., Moosewood, Sunstone). This loads the correct fish list for matching.
 3.  **Prepare the Game**: Ensure Roblox is in windowed or borderless mode and the Fish bag/inventory is accessible.
 4. **Untrack any other quests**: Make sure no other quests are tracked in the game.

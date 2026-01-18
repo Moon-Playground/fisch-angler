@@ -1,7 +1,5 @@
 import customtkinter as ctk
 from PIL import Image
-import winrt.windows.graphics.imaging as imaging
-import winrt.windows.storage.streams as streams
 import cv2
 import numpy as np
 

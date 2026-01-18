@@ -1,5 +1,6 @@
+import pyautogui
 import keyboard
-import pydirectinput
+import pyautogui
 import time
 from tkinter import messagebox
 
@@ -16,8 +17,8 @@ class CoordinatesHelpers:
             except:
                 break
             time.sleep(0.01)
-            
-        x, y = pydirectinput.position()
+
+        x, y = pyautogui.position()
         messagebox.showinfo("Success", f"{label} coordinates set: {x}, {y}")
         return x, y
 

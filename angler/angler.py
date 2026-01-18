@@ -1,12 +1,12 @@
 import asyncio
-import dxcam_cpp as dxcam
-
 import tkinter as tk
 import customtkinter as ctk
 import threading
 import os
-import pydirectinput
 import time
+import sys
+import mss
+import pyautogui
 
 from angler.core.capture_box import CaptureBox
 from angler.core.debug_window import DebugWindow
@@ -26,7 +26,7 @@ class AnglerApp(ctk.CTk, Utils):
         # Load config first
         self.config_data = self.load_config()
         
-        self.camera = dxcam.create()
+        self.camera = mss.mss()
         self.capture_box = CaptureBox(
             box_color="blue",
             box_alpha=0.3,
@@ -39,10 +39,9 @@ class AnglerApp(ctk.CTk, Utils):
         self.enable_overlay = self.config_data['ui']['enable_overlay']
         self.enable_debug = self.config_data['ui'].get('enable_debug', True)
         
-        self.ocr_backend = self.config_data['ocr']['backend'] if self.test_tesseract() else "winrt"
+        self.ocr_backend = "tesseract"
         self.ocr_engine_tesseract = self.init_ocr_engine_tesseract()
-        self.ocr_engine_winrt = self.init_ocr_engine_winrt()
-        self.ocr_engine = self.ocr_engine_tesseract if self.ocr_backend == "tesseract" else self.ocr_engine_winrt
+        self.ocr_engine = self.ocr_engine_tesseract
         self.fish_area_x = self.config_data.get('coordinates', {}).get('fish_area_x', 0)
         self.fish_area_y = self.config_data.get('coordinates', {}).get('fish_area_y', 0)
         self.dialogue_x = self.config_data.get('coordinates', {}).get('dialogue_x', 0)
@@ -175,9 +174,7 @@ Don't enable debug log if you plan to use the macro for long periods of time.
 
         ctk.CTkLabel(self.general_frame, text="OCR Backend").grid(row=1, column=0, padx=15, pady=15, sticky="w")
         self.backend_var = ctk.StringVar(value=self.ocr_backend)
-        backend_list = ["winrt"]
-        if self.test_tesseract():
-            backend_list.append("tesseract")
+        backend_list = ["tesseract"]
         backend_cb = ctk.CTkOptionMenu(self.general_frame, variable=self.backend_var, values=backend_list)
         backend_cb.grid(row=1, column=1, padx=10, pady=15, sticky="ew")
         self.backend_var.trace_add("write", lambda *args: self._update_ocr_backend())
@@ -353,7 +350,7 @@ Don't enable debug log if you plan to use the macro for long periods of time.
 
     def _update_ocr_backend(self):
         self.ocr_backend = self.backend_var.get()
-        self.ocr_engine = self.ocr_engine_tesseract if self.ocr_backend == "tesseract" else self.ocr_engine_winrt
+        self.ocr_engine = self.ocr_engine_tesseract
         self.config_data["ocr"]["backend"] = self.ocr_backend
         self.save_config_file(self.config_data)
 
@@ -426,18 +423,18 @@ Don't enable debug log if you plan to use the macro for long periods of time.
                 # 1. Initial interaction (Press E)
                 if not self.sleep_interruptible(self.initial_delay): continue
                 self.log("Interacting (Pressing E)...")
-                pydirectinput.press('e')
+                pyautogui.press('e')
                 
                 # 2. Open dialogue
                 if not self.sleep_interruptible(self.action_delay): continue
                 self.log(f"Moving to dialogue: ({int(self.dialogue_x)}, {int(self.dialogue_y)})")
-                pydirectinput.moveTo(int(self.dialogue_x), int(self.dialogue_y))
+                pyautogui.moveTo(int(self.dialogue_x), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pydirectinput.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
+                pyautogui.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay): continue
-                pydirectinput.click()
+                pyautogui.click()
                 if not self.sleep_interruptible(self.action_delay): continue
-                pydirectinput.click()
+                pyautogui.click()
 
                 # 3. Capture and OCR
                 if not self.sleep_interruptible(self.action_delay * 4): continue
@@ -469,59 +466,59 @@ Don't enable debug log if you plan to use the macro for long periods of time.
                     if not self.sleep_interruptible(self.loop_delay): continue
                     continue
 
-                pydirectinput.moveTo(int(self.search_bar_x), int(self.search_bar_y))
+                pyautogui.moveTo(int(self.search_bar_x), int(self.search_bar_y))
 
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pydirectinput.moveTo(int(self.search_bar_x-1), int(self.search_bar_y))
+                pyautogui.moveTo(int(self.search_bar_x-1), int(self.search_bar_y))
 
                 if not self.sleep_interruptible(self.action_delay): continue
 
                 self.log(f"Matched: {match}. Proceeding to turn in.")
 
                 # 5. Inventory and Turn-in
-                pydirectinput.press('g')
+                pyautogui.press('g')
                 if not self.sleep_interruptible(self.inv_delay): continue
 
                 if not (self.last_fish is not None and self.last_fish == match):
                     self.log(f"Searching for {match}...")
                     if not self.sleep_interruptible(self.action_delay): continue
-                    pydirectinput.click()
+                    pyautogui.click()
                     if not self.sleep_interruptible(self.action_delay): continue
-                    pydirectinput.keyDown('ctrl')
-                    pydirectinput.press('a')
-                    pydirectinput.keyUp('ctrl')
-                    pydirectinput.press('delete')
+                    pyautogui.keyDown('ctrl')
+                    pyautogui.press('a')
+                    pyautogui.keyUp('ctrl')
+                    pyautogui.press('delete')
                     if not self.sleep_interruptible(self.action_delay): continue
-                    pydirectinput.typewrite(match.lower(), interval=self.typing_delay)
+                    pyautogui.typewrite(match.lower(), interval=self.typing_delay)
                 else:
                     self.log("Skipping search because it's the same fish as previous quest.")
 
                 if not self.sleep_interruptible(self.action_delay): continue
                 self.log("Selecting fish...")
-                pydirectinput.moveTo(int(self.fish_area_x), int(self.fish_area_y))
+                pyautogui.moveTo(int(self.fish_area_x), int(self.fish_area_y))
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pydirectinput.moveTo(int(self.fish_area_x-1), int(self.fish_area_y))
+                pyautogui.moveTo(int(self.fish_area_x-1), int(self.fish_area_y))
                 if not self.sleep_interruptible(self.action_delay): continue
-                pydirectinput.click()
+                pyautogui.click()
 
                 if not self.sleep_interruptible(self.action_delay): continue
                 self.log("Closing interface...")
-                pydirectinput.press('g')
+                pyautogui.press('g')
 
                 if not self.sleep_interruptible(self.action_delay): continue
-                pydirectinput.press('e')
+                pyautogui.press('e')
                 
                 if not self.sleep_interruptible(self.action_delay): continue
-                pydirectinput.moveTo(int(self.dialogue_x), int(self.dialogue_y))
+                pyautogui.moveTo(int(self.dialogue_x), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pydirectinput.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
+                pyautogui.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay): continue
-                pydirectinput.click()
+                pyautogui.click()
 
                 if not self.sleep_interruptible(self.action_delay * 2): continue
-                pydirectinput.press('1')
+                pyautogui.press('1')
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pydirectinput.press('1')
+                pyautogui.press('1')
 
                 self.last_fish = match
                 self.log(f"Loop complete. Waiting {self.loop_delay}s...")

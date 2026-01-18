@@ -1,10 +1,11 @@
 import cv2
+import numpy as np
 
 
 class CaptureHelpers:
     def capture_screen_region(self):
         """
-        Capture a specific region of the screen using dxcam.
+        Capture a specific region of the screen using mss.
         
         Returns:
             numpy.ndarray or None: The captured frame, or None if capture failed
@@ -12,24 +13,18 @@ class CaptureHelpers:
         if self.camera is None:
             return None
 
-        screen_width = self.winfo_screenwidth()
-        screen_height = self.winfo_screenheight()
-
         x = int(self.capture_box.capture_x)
         y = int(self.capture_box.capture_y)
         w = int(self.capture_box.capture_width)
         h = int(self.capture_box.capture_height)
 
-        left = max(0, x)
-        top = max(0, y)
-        right = min(screen_width, x + w)
-        bottom = min(screen_height, y + h)
-
-        if right <= left or bottom <= top:
-            return None
-
         try:
-            frame = self.camera.grab(region=(left, top, right, bottom))
+            # mss uses monitor={"top": y, "left": x, "width": w, "height": h}
+            monitor = {"top": y, "left": x, "width": w, "height": h}
+            sct_img = self.camera.grab(monitor)
+            frame = np.array(sct_img)
+            # Convert BGRA to RGB for consistency
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2RGB)
             return frame
         except Exception as e:
             # print(f"Capture error: {e}")
