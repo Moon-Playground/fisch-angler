@@ -39,9 +39,7 @@ class AnglerApp(ctk.CTk, Utils):
         self.enable_overlay = self.config_data['ui']['enable_overlay']
         self.enable_debug = self.config_data['ui'].get('enable_debug', True)
         
-        self.ocr_backend = "tesseract"
-        self.ocr_engine_tesseract = self.init_ocr_engine_tesseract()
-        self.ocr_engine = self.ocr_engine_tesseract
+        self.ocr_engine = self.init_ocr_engine_tesseract()
         self.fish_area_x = self.config_data.get('coordinates', {}).get('fish_area_x', 0)
         self.fish_area_y = self.config_data.get('coordinates', {}).get('fish_area_y', 0)
         self.dialogue_x = self.config_data.get('coordinates', {}).get('dialogue_x', 0)
@@ -172,23 +170,16 @@ Don't enable debug log if you plan to use the macro for long periods of time.
 
         ctk.CTkLabel(self.general_frame, text="General Settings", font=("Arial", 14, "bold")).grid(row=0, column=0, columnspan=2, pady=(10, 5))
 
-        ctk.CTkLabel(self.general_frame, text="OCR Backend").grid(row=1, column=0, padx=15, pady=15, sticky="w")
-        self.backend_var = ctk.StringVar(value=self.ocr_backend)
-        backend_list = ["tesseract"]
-        backend_cb = ctk.CTkOptionMenu(self.general_frame, variable=self.backend_var, values=backend_list)
-        backend_cb.grid(row=1, column=1, padx=10, pady=15, sticky="ew")
-        self.backend_var.trace_add("write", lambda *args: self._update_ocr_backend())
-
         # Overlay entries
-        ctk.CTkLabel(self.general_frame, text="Status Overlay").grid(row=2, column=0, padx=15, pady=15, sticky="w")
+        ctk.CTkLabel(self.general_frame, text="Status Overlay").grid(row=1, column=0, padx=15, pady=15, sticky="w")
         self.overlay_var = ctk.BooleanVar(value=self.enable_overlay)
         overlay_cb = ctk.CTkSwitch(self.general_frame, text="", variable=self.overlay_var, command=self._update_overlay)
-        overlay_cb.grid(row=2, column=1, padx=10, pady=15, sticky="ew")
+        overlay_cb.grid(row=1, column=1, padx=10, pady=15, sticky="ew")
 
-        ctk.CTkLabel(self.general_frame, text="Debug Log").grid(row=3, column=0, padx=15, pady=15, sticky="w")
+        ctk.CTkLabel(self.general_frame, text="Debug Log").grid(row=2, column=0, padx=15, pady=15, sticky="w")
         self.debug_var = ctk.BooleanVar(value=self.enable_debug)
         debug_cb = ctk.CTkSwitch(self.general_frame, text="", variable=self.debug_var, command=self._update_debug)
-        debug_cb.grid(row=3, column=1, padx=10, pady=15, sticky="ew")
+        debug_cb.grid(row=2, column=1, padx=10, pady=15, sticky="ew")
 
         # --- DELAYS TAB ---
         self.delay_frame = ctk.CTkFrame(self.delays_tab)
@@ -348,11 +339,6 @@ Don't enable debug log if you plan to use the macro for long periods of time.
         self.config_data["misc"]["angler_location"] = self.angler_location
         self.save_config_file(self.config_data)
 
-    def _update_ocr_backend(self):
-        self.ocr_backend = self.backend_var.get()
-        self.ocr_engine = self.ocr_engine_tesseract
-        self.config_data["ocr"]["backend"] = self.ocr_backend
-        self.save_config_file(self.config_data)
 
     def _update_overlay(self):
         self.enable_overlay = self.overlay_var.get()

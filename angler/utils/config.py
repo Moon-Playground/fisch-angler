@@ -10,8 +10,7 @@ class Config:
                 "capture_width": 124,
                 "capture_height": 62,
                 "capture_x": 710,
-                "capture_y": 390,
-                "backend": "tesseract"
+                "capture_y": 390
             },
             "hotkeys": {
                 "test_capture": "F2",
@@ -95,7 +94,6 @@ class Config:
         self.config_data["ocr"]["capture_height"] = self.capture_box.capture_height
         self.config_data["ocr"]["capture_x"] = self.capture_box.capture_x
         self.config_data["ocr"]["capture_y"] = self.capture_box.capture_y
-        self.config_data["ocr"]["backend"] = self.ocr_backend
         
         if "coordinates" not in self.config_data:
             self.config_data["coordinates"] = {}

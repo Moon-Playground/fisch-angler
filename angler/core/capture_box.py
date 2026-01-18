@@ -38,13 +38,13 @@ class CaptureBox(tk.Toplevel):
     def update_cursor(self, event):
         edge = self.get_edge(event.x, event.y)
         if edge == "n" or edge == "s":
-            self.config(cursor="size_ns")
+            self.config(cursor="sb_v_double_arrow")
         elif edge == "e" or edge == "w":
-            self.config(cursor="size_we")
+            self.config(cursor="sb_h_double_arrow")
         elif edge == "nw" or edge == "se":
-            self.config(cursor="size_nw_se")
+            self.config(cursor="top_left_corner")
         elif edge == "ne" or edge == "sw":
-            self.config(cursor="size_ne_sw")
+            self.config(cursor="top_right_corner")
         else:
             self.config(cursor="fleur")
 
