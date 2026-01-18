@@ -26,8 +26,6 @@ class TestHelpers:
             # Fallback if process_image returned something else (e.g. SoftwareBitmap)
             img = Image.new("RGB", (100, 100), "gray")
 
-        lbl_text = ctk.CTkLabel(top, text=f"OCR Backend: {getattr(self, 'ocr_backend', 'Unknown')}", wraplength=350)
-        lbl_text.pack(padx=20, pady=(0, 0))
         
         # Create CTkImage - keeping original size
         ctk_img = ctk.CTkImage(light_image=img, dark_image=img, size=img.size)

@@ -28,13 +28,7 @@ class OcrHandler:
             print(f"Error initializing Tesseract: {e}")
             return None
 
-    def init_ocr_engine_winrt(self):
-        return None
-
     async def recognize_frame(self, ocr_engine, frame):
-        return await self.recognize_frame_tesseract(ocr_engine, frame)
-
-    async def recognize_frame_tesseract(self, ocr_engine, frame):
         if ocr_engine is None:
             return ""
         try:
@@ -44,9 +38,6 @@ class OcrHandler:
         except Exception as e:
             print(f"Error recognizing frame with Tesseract: {e}")
             return ""
-
-    async def recognize_frame_winrt(self, ocr_engine, frame):
-        return ""
 
     def fuzzy_match(self, text, target, threshold=60):
         if not text or not text.strip():

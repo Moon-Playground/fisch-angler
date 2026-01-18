@@ -11,8 +11,7 @@
 ## ✨ Features
 
 - 🚀 **High-Speed Capture**: Powered by `mss`, achieving low latency screen region monitoring.
-- 🔍 **OCR Engine**: 
-  - **Tesseract OCR**: Industry-standard open-source OCR engine.
+- 🔍 **OCR Engine**: Standardized on **Tesseract OCR** for reliable text recognition.
 - 🎯 **Fuzzy Matching**: Intelligent text recognition that compensates for OCR inaccuracies using `rapidfuzz`.
 - 🕹️ **Low-Level Input**: Uses `python-uinput` for direct kernel-level input simulation.
 - ⌨️ **Hotkeys**: Uses `pynput` for root-less hotkey support on X11.
@@ -87,7 +86,7 @@ Settings are persisted in `angler.toml`. You can manually edit this file to fine
 
 ```toml
 [ocr]
-backend = "tesseract"
+capture_width = 124
 
 [delay]
 loop = 30.0    # Cycle delay in seconds
