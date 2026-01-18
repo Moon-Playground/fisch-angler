@@ -6,7 +6,7 @@ import os
 import time
 import sys
 import mss
-import pyautogui
+
 
 from angler.core.capture_box import CaptureBox
 from angler.core.debug_window import DebugWindow
@@ -423,18 +423,18 @@ Don't enable debug log if you plan to use the macro for long periods of time.
                 # 1. Initial interaction (Press E)
                 if not self.sleep_interruptible(self.initial_delay): continue
                 self.log("Interacting (Pressing E)...")
-                pyautogui.press('e')
+                self.press('e')
                 
                 # 2. Open dialogue
                 if not self.sleep_interruptible(self.action_delay): continue
                 self.log(f"Moving to dialogue: ({int(self.dialogue_x)}, {int(self.dialogue_y)})")
-                pyautogui.moveTo(int(self.dialogue_x), int(self.dialogue_y))
+                self.moveTo(int(self.dialogue_x), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pyautogui.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
+                self.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay): continue
-                pyautogui.click()
+                self.click()
                 if not self.sleep_interruptible(self.action_delay): continue
-                pyautogui.click()
+                self.click()
 
                 # 3. Capture and OCR
                 if not self.sleep_interruptible(self.action_delay * 4): continue
@@ -466,59 +466,59 @@ Don't enable debug log if you plan to use the macro for long periods of time.
                     if not self.sleep_interruptible(self.loop_delay): continue
                     continue
 
-                pyautogui.moveTo(int(self.search_bar_x), int(self.search_bar_y))
+                self.moveTo(int(self.search_bar_x), int(self.search_bar_y))
 
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pyautogui.moveTo(int(self.search_bar_x-1), int(self.search_bar_y))
+                self.moveTo(int(self.search_bar_x-1), int(self.search_bar_y))
 
                 if not self.sleep_interruptible(self.action_delay): continue
 
                 self.log(f"Matched: {match}. Proceeding to turn in.")
 
                 # 5. Inventory and Turn-in
-                pyautogui.press('g')
+                self.press('g')
                 if not self.sleep_interruptible(self.inv_delay): continue
 
                 if not (self.last_fish is not None and self.last_fish == match):
                     self.log(f"Searching for {match}...")
                     if not self.sleep_interruptible(self.action_delay): continue
-                    pyautogui.click()
+                    self.click()
                     if not self.sleep_interruptible(self.action_delay): continue
-                    pyautogui.keyDown('ctrl')
-                    pyautogui.press('a')
-                    pyautogui.keyUp('ctrl')
-                    pyautogui.press('delete')
+                    self.keyDown('ctrl')
+                    self.press('a')
+                    self.keyUp('ctrl')
+                    self.press('delete')
                     if not self.sleep_interruptible(self.action_delay): continue
-                    pyautogui.typewrite(match.lower(), interval=self.typing_delay)
+                    self.typewrite(match.lower(), interval=self.typing_delay)
                 else:
                     self.log("Skipping search because it's the same fish as previous quest.")
 
                 if not self.sleep_interruptible(self.action_delay): continue
                 self.log("Selecting fish...")
-                pyautogui.moveTo(int(self.fish_area_x), int(self.fish_area_y))
+                self.moveTo(int(self.fish_area_x), int(self.fish_area_y))
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pyautogui.moveTo(int(self.fish_area_x-1), int(self.fish_area_y))
+                self.moveTo(int(self.fish_area_x-1), int(self.fish_area_y))
                 if not self.sleep_interruptible(self.action_delay): continue
-                pyautogui.click()
+                self.click()
 
                 if not self.sleep_interruptible(self.action_delay): continue
                 self.log("Closing interface...")
-                pyautogui.press('g')
+                self.press('g')
 
                 if not self.sleep_interruptible(self.action_delay): continue
-                pyautogui.press('e')
+                self.press('e')
                 
                 if not self.sleep_interruptible(self.action_delay): continue
-                pyautogui.moveTo(int(self.dialogue_x), int(self.dialogue_y))
+                self.moveTo(int(self.dialogue_x), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pyautogui.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
+                self.moveTo(int(self.dialogue_x-1), int(self.dialogue_y))
                 if not self.sleep_interruptible(self.action_delay): continue
-                pyautogui.click()
+                self.click()
 
                 if not self.sleep_interruptible(self.action_delay * 2): continue
-                pyautogui.press('1')
+                self.press('1')
                 if not self.sleep_interruptible(self.action_delay / 2): continue
-                pyautogui.press('1')
+                self.press('1')
 
                 self.last_fish = match
                 self.log(f"Loop complete. Waiting {self.loop_delay}s...")

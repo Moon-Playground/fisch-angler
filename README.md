@@ -14,7 +14,7 @@
 - 🔍 **OCR Engine**: 
   - **Tesseract OCR**: Industry-standard open-source OCR engine.
 - 🎯 **Fuzzy Matching**: Intelligent text recognition that compensates for OCR inaccuracies using `rapidfuzz`.
-- 🕹️ **Low-Level Input**: Uses `pyautogui` for game compatibility.
+- 🕹️ **Low-Level Input**: Uses `python-uinput` for direct kernel-level input simulation.
 - ⌨️ **Hotkeys**: Uses `pynput` for root-less hotkey support on X11.
 - 🎨 **Modern Interface**: A sleek, dark-themed dashboard built with `CustomTkinter`.
 - 🌍 **Multi-Location Support**: Built-in configurations for many in-game locations (Moosewood, Sunstone, Roslit, etc.).
@@ -26,7 +26,17 @@
 
 - **Python 3.11 or higher**
 - **Tesseract OCR**: Install via your package manager (e.g., `sudo apt install tesseract-ocr`).
-- **X11 Session (Linux)**: This macro currently **does not support Wayland**. Most Linux distributions (like Ubuntu, Fedora, Debian) default to Wayland. You must switch to an **Xorg/X11** session at the login screen for screen capture and hotkeys to work.
+- **X11 Session (Linux)**: This macro currently **does not support Wayland**. You must switch to an **Xorg/X11** session at the login screen for screen capture and hotkeys to work.
+- **UInput Permissions**: While hotkeys (via `pynput`) work without root, simulating clicks and keypresses (via `python-uinput`) requires permissions to `/dev/uinput`.
+  ```bash
+  # 1. Create a udev rule for uinput
+  echo 'KERNEL=="uinput", GROUP="input", MODE="0660"' | sudo tee /etc/udev/rules.d/99-uinput.rules
+  
+  # 2. Add your user to the input group
+  sudo usermod -aG input $USER
+  
+  # 3. Reboot or log out and back in for changes to take effect
+  ```
 
 ---
 
