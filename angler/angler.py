@@ -26,7 +26,7 @@ class AnglerApp(ctk.CTk, Utils):
         # Load config first
         self.config_data = self.load_config()
         
-        self.camera = mss.mss()
+        # mss camera is now handled thread-locally in CaptureHelpers
         self.capture_box = CaptureBox(
             box_color="blue",
             box_alpha=0.3,
