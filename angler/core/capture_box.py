@@ -19,8 +19,13 @@ class CaptureBox(tk.Toplevel):
         self.overrideredirect(True)
         self.configure(bg=box_color, highlightthickness=2, highlightbackground="white")
 
-        self.attributes("-alpha", box_alpha)
+        self.box_alpha = box_alpha
+        self.attributes("-alpha", self.box_alpha)
         self.attributes("-topmost", True)
+
+        # On some Linux compositors, alpha may need to be reapplied after the window is mapped
+        self.bind("<Map>", lambda e: self.attributes("-alpha", self.box_alpha))
+        self.after(100, lambda: self.attributes("-alpha", self.box_alpha))
 
         self.border_width = 8
         self.min_size = 20

@@ -30,12 +30,12 @@ class AnglerApp(ctk.CTk, Utils):
         self.capture_box = CaptureBox(
             box_color="blue",
             box_alpha=0.3,
+            box_x=self.config_data['ocr']['capture_x'],
+            box_y=self.config_data['ocr']['capture_y'],
+            box_width=self.config_data['ocr']['capture_width'],
+            box_height=self.config_data['ocr']['capture_height'],
             text=""
         )
-        self.capture_box.capture_width = self.config_data['ocr']['capture_width']
-        self.capture_box.capture_height = self.config_data['ocr']['capture_height']
-        self.capture_box.capture_x = self.config_data['ocr']['capture_x']
-        self.capture_box.capture_y = self.config_data['ocr']['capture_y']
         self.enable_overlay = self.config_data['ui']['enable_overlay']
         self.enable_debug = self.config_data['ui'].get('enable_debug', True)
         
@@ -253,6 +253,10 @@ Don't enable debug log if you plan to use the macro for long periods of time.
         self.status_window.attributes("-topmost", True)
         self.status_window.attributes("-alpha", 0.7) # Semi-transparent
         self.status_window.overrideredirect(True)    # Borderless
+        
+        # Ensure transparency on Linux compositors
+        self.status_window.bind("<Map>", lambda e: self.status_window.attributes("-alpha", 0.7))
+        self.status_window.after(100, lambda: self.status_window.attributes("-alpha", 0.7))
         
         # Style
         self.status_window.configure(bg="black")
@@ -515,7 +519,6 @@ Don't enable debug log if you plan to use the macro for long periods of time.
                 if not self.sleep_interruptible(self.loop_delay): continue
 
     def run(self):
-        self.capture_box.geometry(f"{self.capture_box.capture_width}x{self.capture_box.capture_height}+{self.capture_box.capture_x}+{self.capture_box.capture_y}")
         self.capture_box.withdraw()
         
         threading.Thread(target=self.angler_worker, daemon=True).start()
