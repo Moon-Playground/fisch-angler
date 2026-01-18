@@ -15,6 +15,7 @@
   - **Tesseract OCR**: Industry-standard open-source OCR engine.
 - 🎯 **Fuzzy Matching**: Intelligent text recognition that compensates for OCR inaccuracies using `rapidfuzz`.
 - 🕹️ **Low-Level Input**: Uses `pyautogui` for game compatibility.
+- ⌨️ **Hotkeys**: Uses `pynput` for root-less hotkey support on X11.
 - 🎨 **Modern Interface**: A sleek, dark-themed dashboard built with `CustomTkinter`.
 - 🌍 **Multi-Location Support**: Built-in configurations for many in-game locations (Moosewood, Sunstone, Roslit, etc.).
 - 📊 **Real-time Debugging**: Transparent overlay and detailed log window for real-time status tracking.
@@ -25,7 +26,7 @@
 
 - **Python 3.11 or higher**
 - **Tesseract OCR**: Install via your package manager (e.g., `sudo apt install tesseract-ocr`).
-- **X11 Session (Linux)**: This macro currently **does not support Wayland**. Most Linux distributions (like Ubuntu, Fedora, Debian) default to Wayland. You must switch to an **Xorg/X11** session at the login screen for screen capture and input simulation to work.
+- **X11 Session (Linux)**: This macro currently **does not support Wayland**. Most Linux distributions (like Ubuntu, Fedora, Debian) default to Wayland. You must switch to an **Xorg/X11** session at the login screen for screen capture and hotkeys to work.
 
 ---
 

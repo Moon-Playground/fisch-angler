@@ -4,6 +4,6 @@ pytesseract
 rapidfuzz
 opencv-python
 Pillow
-keyboard
+pynput
 mss
 pyautogui

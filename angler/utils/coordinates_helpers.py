@@ -1,6 +1,4 @@
-import pyautogui
-import keyboard
-import pyautogui
+from pynput import keyboard
 import time
 from tkinter import messagebox
 
@@ -8,17 +6,36 @@ class CoordinatesHelpers:
     def _wait_for_pos(self, label):
         messagebox.showinfo("Selection", f"Put the mouse over {label} then press R to set.")
         
+        # We'll use a listener to detect the 'R' key press
+        r_pressed = False
+        
+        def on_press(key):
+            nonlocal r_pressed
+            try:
+                # Check for alphabet keys
+                if hasattr(key, 'char') and key.char and key.char.lower() == 'r':
+                    r_pressed = True
+                    return False  # Stop the listener
+            except AttributeError:
+                pass
+
+        # Start the listener in a non-blocking way
+        listener = keyboard.Listener(on_press=on_press)
+        listener.start()
+        
         # Wait for 'R' key while keeping GUI responsive
-        while True:
-            if keyboard.is_pressed('r'):
-                break
+        while not r_pressed:
             try:
                 self.update()
             except:
                 break
             time.sleep(0.01)
+        
+        # Ensure the listener is stopped
+        if listener.running:
+            listener.stop()
 
-        x, y = pyautogui.position()
+        x, y = self.winfo_pointerx(), self.winfo_pointery()
         messagebox.showinfo("Success", f"{label} coordinates set: {x}, {y}")
         return x, y
 
