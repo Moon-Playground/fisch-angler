@@ -26,6 +26,7 @@
 - **Python 3.11 or higher**
 - **Tesseract OCR**: Install via your package manager (e.g., `sudo apt install tesseract-ocr`).
 - **X11 Session (Linux)**: This macro currently **does not support Wayland**. Most Linux distributions (like Ubuntu, Fedora, Debian) default to Wayland. You must switch to an **Xorg/X11** session at the login screen for screen capture and hotkeys to work.
+- **OS (for prebuilt binaries)**: Linux (x86_64) with `glibc` version 2.36 or higher. (e.g., Ubuntu 24.04+, Fedora 38+, Debian 12+)
 
 ---
 
@@ -34,7 +35,7 @@
 ### Prebuilt Binaries
 1. Download the latest release from [Releases](https://github.com/Moon-Playground/fisch-angler/releases).
 2. Extract the ZIP file.
-3. Run `angler.exe`.
+3. Run `angler`.
 
 ### From Source
 1. **Clone the repository**:
